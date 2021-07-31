@@ -10,8 +10,23 @@ The vanilla bundle can be dyed with every dye color
 
 ### Better Bundles
 
-The vanilla bundle can be upgraded. 
+The vanilla bundle can be upgraded.
+
+While higher tier bundles have more inventory space, the netherite bundle just makes the bundle fire resistant.
 ![](https://i.ibb.co/gPQ73YK/better-bundles.png)
+
+<details><summary>Recipes</summary>
+
+![](https://i.ibb.co/cxdHq1V/copper-bundle-recipe.png)
+![](https://i.ibb.co/K795s4V/copper-iron-bundle-recipe.png)
+![](https://i.ibb.co/qjtpxY3/iron-bundle-recipe.png)
+![](https://i.ibb.co/SffzccR/silver-bundle-recipe.png)
+![](https://i.ibb.co/8cg1cDf/silver-gold-bundle-recipe.png)
+![](https://i.ibb.co/g9VwrRN/gold-bundle-recipe.png)
+![](https://i.ibb.co/R7zRmDb/diamond-bundle-recipe.png)
+![](https://i.ibb.co/RhFs09R/netherite-bundle-recipe.png)
+
+</details>
 
 ## Links
 [Curseforge](https://www.curseforge.com/minecraft/mc-mods/better-bundles) Download  
