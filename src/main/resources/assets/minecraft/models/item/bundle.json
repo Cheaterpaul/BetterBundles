@@ -2,7 +2,7 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "item/bundle",
-        "layer3": "item/bundle_top"
+        "layer1": "item/bundle_top"
     },
     "overrides": [
         { "predicate": { "filled": 0.0000001 }, "model": "item/bundle_filled" }

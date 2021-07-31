@@ -1,0 +1,19 @@
+{
+  "type": "betterbundles:nbt_bundle_recipe",
+  "pattern": [
+    "XXX",
+    "XYX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/iron"
+    },
+    "Y": {
+      "item": "minecraft:bundle"
+    }
+  },
+  "result": {
+    "item": "betterbundles:iron_bundle"
+  }
+}

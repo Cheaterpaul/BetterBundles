@@ -1,0 +1,19 @@
+{
+  "type": "betterbundles:nbt_bundle_recipe",
+  "pattern": [
+    " X ",
+    "XYX",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/netherite"
+    },
+    "Y": {
+      "item": "betterbundles:diamond_bundle"
+    }
+  },
+  "result": {
+    "item": "betterbundles:netherite_bundle"
+  }
+}

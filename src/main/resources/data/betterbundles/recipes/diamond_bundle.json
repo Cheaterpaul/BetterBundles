@@ -1,0 +1,19 @@
+{
+  "type": "betterbundles:nbt_bundle_recipe",
+  "pattern": [
+    "XXX",
+    "XYX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:gems/diamond"
+    },
+    "Y": {
+      "item": "betterbundles:gold_bundle"
+    }
+  },
+  "result": {
+    "item": "betterbundles:diamond_bundle"
+  }
+}
