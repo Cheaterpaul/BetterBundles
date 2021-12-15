@@ -31,6 +31,7 @@ apply from: 'gradle/crowdin.gradle'
 apply from: 'gradle/curse.gradle'
 apply from: 'gradle/forge.gradle'
 apply from: 'gradle/maven.gradle'
+apply from: 'gradle/modrinth.gradle'
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
