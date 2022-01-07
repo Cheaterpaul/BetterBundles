@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 public class BetterBundlesMod
 {
     public static final String MODID = "betterbundles";
-    public static final Item BUNDLE = new BundleItem(pt()).setRegistryName("minecraft","bundle");
+    public static final Item BUNDLE = new SizedBundleItem(pt(), 64).setRegistryName("minecraft","bundle");
     public static final Item BUNDLE_COPPER = new SizedBundleItem(pt(),96).setRegistryName(MODID,"copper_bundle");
     public static final Item BUNDLE_IRON = new SizedBundleItem(pt(),128).setRegistryName(MODID,"iron_bundle");
     public static final Item BUNDLE_SILVER = new SizedBundleItem(pt(),192).setRegistryName(MODID,"silver_bundle");
@@ -29,8 +29,9 @@ public class BetterBundlesMod
     public static final Item BUNDLE_NETHERITE = new SizedBundleItem(pt().fireResistant(),512).setRegistryName(MODID,"netherite_bundle");
     public static final RecipeType<NBTShapedRecipe> RECIPE = RecipeType.register(MODID + ":nbt_bundle_recipe");
     public static final RecipeSerializer<?> RECIPE_SERIALIZER = new NBTShapedRecipe.Serializer().setRegistryName(MODID, "nbt_bundle_recipe");
-    public static final Tag<Item> COPPER_TAG = ItemTags.createOptional(new ResourceLocation("forge", "ingots/copper"), Sets.newHashSet(() -> Items.COPPER_INGOT));
+    public static final Tag<Item> COPPER_TAG = ItemTags.createOptional(new ResourceLocation("forge", "ingots/copper"));
     public static final Tag<Item> SILVER_TAG = ItemTags.createOptional(new ResourceLocation("forge", "ingots/silver"));
+    public static final Tag<Item> BUNDLE_TAG = ItemTags.createOptional(new ResourceLocation("forge", "bundles"));
 
     private static Item.Properties pt() {
         return new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TOOLS);

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:bundle",
+    "betterbundles:copper_bundle",
+    "betterbundles:iron_bundle",
+    "betterbundles:silver_bundle",
+    "betterbundles:gold_bundle",
+    "betterbundles:diamond_bundle",
+    "betterbundles:netherite_bundle"
+  ]
+}
