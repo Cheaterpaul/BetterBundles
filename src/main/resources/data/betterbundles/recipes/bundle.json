@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SHS",
+    "H H",
+    "HHH"
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:string"
+    },
+    "H": {
+      "item": "minecraft:rabbit_hide"
+    }
+  },
+  "result": {
+    "item": "minecraft:bundle"
+  }
+}
