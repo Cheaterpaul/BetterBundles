@@ -24,6 +24,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -50,11 +51,11 @@ public class SizedBundleItem extends BundleItem {
             ItemStack var5 = slot.getItem();
             if (var5.isEmpty()) {
                 removeOne(stack).ifPresent((p_150740_) -> {
-                    add(stack, slot.safeInsert(p_150740_), size);
+                    add(stack, slot.safeInsert(p_150740_), size, player);
                 });
             } else if (var5.getItem().canFitInsideContainerItems()) {
                 int var6 = (size - getContentWeight(stack, size)) / getWeight(var5, size);
-                add(stack, slot.safeTake(var5.getCount(), var6, player), size);
+                add(stack, slot.safeTake(var5.getCount(), var6, player), size, player);
             }
 
             return true;
@@ -69,7 +70,7 @@ public class SizedBundleItem extends BundleItem {
                 Objects.requireNonNull(slotAccess);
                 var10000.ifPresent(slotAccess::set);
             } else {
-                stack2.shrink(add(stack1, stack2, size));
+                stack2.shrink(add(stack1, stack2, size, player));
             }
 
             return true;
@@ -127,7 +128,7 @@ public class SizedBundleItem extends BundleItem {
 
 
 
-    private static int add(ItemStack bundleStack, ItemStack addStack, int size) {
+    private static int add(ItemStack bundleStack, ItemStack addStack, int size, @Nullable Player player) {
         if (!addStack.isEmpty() && addStack.getItem().canFitInsideContainerItems()) {
             CompoundTag tag = bundleStack.getOrCreateTag();
             if (!tag.contains("Items")) {
@@ -136,6 +137,12 @@ public class SizedBundleItem extends BundleItem {
 
             int contentWeight = getContentWeight(bundleStack, size);
             int addStackWeight = getWeight(addStack, 64);
+            if (addStackWeight == 0) {
+                if (player != null) {
+                    player.displayClientMessage(new TranslatableComponent("text.betterbundles.stack_size_to_large"), false);
+                }
+                return 0;
+            }
             int remainingSlots = Math.min(addStack.getCount(), (size - contentWeight) / addStackWeight);
             if (remainingSlots == 0) {
                 return 0;
@@ -194,7 +201,7 @@ public class SizedBundleItem extends BundleItem {
                 }
             }
 
-            return size / stack.getMaxStackSize();
+            return (int)(size / (float)stack.getMaxStackSize());
         }
     }
 
