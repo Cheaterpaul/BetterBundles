@@ -201,7 +201,7 @@ public class SizedBundleItem extends BundleItem {
                 }
             }
 
-            return (int)(size / (float)stack.getMaxStackSize());
+            return size / stack.getMaxStackSize();
         }
     }
 
