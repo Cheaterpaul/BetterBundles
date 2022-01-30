@@ -24,6 +24,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -139,16 +140,20 @@ public class SizedBundleItem extends BundleItem {
             if (remainingSlots == 0) {
                 return 0;
             } else {
+                int putSize = remainingSlots;
                 ListTag list = tag.getList("Items", 10);
-                Optional<CompoundTag> var7 = getMatchingItem(addStack, list);
-                if (var7.isPresent()) {
-                    CompoundTag var8 = var7.get();
-                    ItemStack var9 = ItemStack.of(var8);
-                    var9.grow(remainingSlots);
-                    var9.save(var8);
-                    list.remove(var8);
-                    list.add(0, var8);
-                } else {
+                List<CompoundTag> var7 = getMatchingItem(addStack, list);
+                for (CompoundTag itemTag : var7) {
+                    if (remainingSlots <= 0) break;
+                    ItemStack var9 = ItemStack.of(itemTag);
+                    int freeSlots = Math.min(var9.getMaxStackSize() - var9.getCount(), remainingSlots);
+                    var9.grow(freeSlots);
+                    var9.save(itemTag);
+                    list.remove(itemTag);
+                    list.add(0, itemTag);
+                    remainingSlots -= freeSlots;
+                }
+                if (remainingSlots > 0) {
                     ItemStack var10 = addStack.copy();
                     var10.setCount(remainingSlots);
                     CompoundTag var11 = new CompoundTag();
@@ -156,22 +161,25 @@ public class SizedBundleItem extends BundleItem {
                     list.add(0, var11);
                 }
 
-                return remainingSlots;
+                return putSize;
             }
         } else {
             return 0;
         }
     }
 
-    private static Optional<CompoundTag> getMatchingItem(ItemStack p_150757_, ListTag p_150758_) {
+    private static List<CompoundTag> getMatchingItem(ItemStack p_150757_, ListTag p_150758_) {
         if (BetterBundlesMod.BUNDLE_TAG.contains(p_150757_.getItem())) {
-            return Optional.empty();
+            return Collections.emptyList();
         } else {
             Stream<?> var10000 = p_150758_.stream();
             var10000 = var10000.filter(CompoundTag.class::isInstance);
             return var10000.map(CompoundTag.class::cast).filter((p_150755_) -> {
                 return ItemStack.isSameItemSameTags(ItemStack.of(p_150755_), p_150757_);
-            }).findFirst();
+            }).filter(tag -> {
+                ItemStack stack = ItemStack.of(tag);
+                return stack.getCount() < stack.getMaxStackSize();
+            }).toList();
         }
     }
 
