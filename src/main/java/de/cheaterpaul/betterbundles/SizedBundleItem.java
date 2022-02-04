@@ -54,7 +54,7 @@ public class SizedBundleItem extends BundleItem {
                     add(stack, slot.safeInsert(p_150740_), size, player);
                 });
             } else if (var5.getItem().canFitInsideContainerItems()) {
-                int var6 = (size - getContentWeight(stack, size)) / getWeight(var5, size);
+                int var6 = (size - getContentWeight(stack, 64)) / getWeight(var5, 64);
                 add(stack, slot.safeTake(var5.getCount(), var6, player), size, player);
             }
 
@@ -93,12 +93,12 @@ public class SizedBundleItem extends BundleItem {
 
     @Override
     public boolean isBarVisible(@Nonnull ItemStack stack) {
-        return getContentWeight(stack, size) > 0;
+        return getContentWeight(stack, 64) > 0;
     }
 
     @Override
     public int getBarWidth(@Nonnull ItemStack stack) {
-        return Math.min(1 + 12 * getContentWeight(stack, size) / size, 13);
+        return Math.min(1 + 12 * getContentWeight(stack, 64) / size, 13);
     }
 
     @Override
@@ -113,12 +113,12 @@ public class SizedBundleItem extends BundleItem {
         Stream<ItemStack> var10000 = getContents(stack);
         Objects.requireNonNull(var2);
         var10000.forEach(var2::add);
-        return Optional.of(new BundleTooltip(var2, getContentWeight(stack, size)));
+        return Optional.of(new BundleTooltip(var2, getContentWeight(stack, 64)));
     }
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Level level, List<Component> components, @Nonnull TooltipFlag flag) {
-        components.add((new TranslatableComponent("item.minecraft.bundle.fullness", getContentWeight(stack, size), size)).withStyle(ChatFormatting.GRAY));
+        components.add((new TranslatableComponent("item.minecraft.bundle.fullness", getContentWeight(stack, 64), size)).withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -135,7 +135,7 @@ public class SizedBundleItem extends BundleItem {
                 tag.put("Items", new ListTag());
             }
 
-            int contentWeight = getContentWeight(bundleStack, size);
+            int contentWeight = getContentWeight(bundleStack, 64);
             int addStackWeight = getWeight(addStack, 64);
             if (addStackWeight == 0) {
                 if (player != null) {
@@ -207,7 +207,7 @@ public class SizedBundleItem extends BundleItem {
 
     private static int getContentWeight(ItemStack bundleStack, int size) {
         return getContents(bundleStack).mapToInt((stack) -> {
-            return getWeight(stack,64) * stack.getCount();
+            return getWeight(stack,size) * stack.getCount();
         }).sum();
     }
 
