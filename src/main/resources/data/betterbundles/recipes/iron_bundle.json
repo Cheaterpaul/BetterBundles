@@ -1,19 +1,35 @@
 {
-  "type": "betterbundles:nbt_bundle_recipe",
-  "pattern": [
-    "XXX",
-    "XYX",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:ingots/iron"
-    },
-    "Y": {
-      "item": "minecraft:bundle"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "value": {
+            "option": "enhanced_bundle",
+            "type": "betterbundles:config"
+          },
+          "type": "forge:not"
+        }
+      ],
+      "recipe": {
+        "type": "betterbundles:nbt_bundle_recipe",
+        "pattern": [
+          "XXX",
+          "XYX",
+          "XXX"
+        ],
+        "key": {
+          "X": {
+            "tag": "forge:ingots/iron"
+          },
+          "Y": {
+            "item": "minecraft:bundle"
+          }
+        },
+        "result": {
+          "item": "betterbundles:iron_bundle"
+        }
+      }
     }
-  },
-  "result": {
-    "item": "betterbundles:iron_bundle"
-  }
+  ]
 }

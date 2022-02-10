@@ -11,6 +11,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -32,6 +34,8 @@ public class BetterBundlesMod
     public static final Tag<Item> COPPER_TAG = ItemTags.createOptional(new ResourceLocation("forge", "ingots/copper"));
     public static final Tag<Item> SILVER_TAG = ItemTags.createOptional(new ResourceLocation("forge", "ingots/silver"));
     public static final Tag<Item> BUNDLE_TAG = ItemTags.createOptional(new ResourceLocation("forge", "bundles"));
+    public static final IConditionSerializer<?> CONFIG_CONDITION = CraftingHelper.register(new ConfigCondition.Serializer());
+
 
     private static Item.Properties pt() {
         return new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TOOLS);
@@ -40,6 +44,7 @@ public class BetterBundlesMod
     public BetterBundlesMod() {
         MinecraftForge.EVENT_BUS.register(this);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientColors::registerMethod);
+        Config.register();
     }
 
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
