@@ -5,5 +5,5 @@
   "item.betterbundles.gold_bundle": "Gold Bundle",
   "item.betterbundles.diamond_bundle": "Diamond Bundle",
   "item.betterbundles.netherite_bundle": "Netherite Bundle",
-  "text.betterbundles.stack_size_to_large": "The max stack size is to large to be handled by bundles"
+  "text.betterbundles.stack_size_to_large": "The max stack size is too large to be handled by bundles"
 }
