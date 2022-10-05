@@ -176,7 +176,7 @@ public class SizedBundleItem extends BundleItem {
     }
 
     private static List<CompoundTag> getMatchingItem(ItemStack p_150757_, ListTag p_150758_) {
-        if (BetterBundlesMod.BUNDLE_TAG.contains(p_150757_.getItem())) {
+        if (p_150757_.is(BetterBundlesMod.BUNDLE_TAG)) {
             return Collections.emptyList();
         } else {
             Stream<?> var10000 = p_150758_.stream();
@@ -191,7 +191,7 @@ public class SizedBundleItem extends BundleItem {
     }
 
     private static int getWeight(ItemStack stack, int size) {
-        if (BetterBundlesMod.BUNDLE_TAG.contains(stack.getItem())) {
+        if (stack.is(BetterBundlesMod.BUNDLE_TAG)) {
             return 4 + getContentWeight(stack, size);
         } else {
             if ((stack.is(Items.BEEHIVE) || stack.is(Items.BEE_NEST)) && stack.hasTag()) {
