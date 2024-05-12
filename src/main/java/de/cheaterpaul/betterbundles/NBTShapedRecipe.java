@@ -1,24 +1,33 @@
 package de.cheaterpaul.betterbundles;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import de.cheaterpaul.betterbundles.mixin.ShapedRecipeMixin;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
 public class NBTShapedRecipe extends ShapedRecipe {
 
-    public NBTShapedRecipe(ResourceLocation p_250963_, String p_250221_, CraftingBookCategory p_250716_, int p_251480_, int p_251980_, NonNullList<Ingredient> p_252150_, ItemStack p_248581_) {
-        super(p_250963_, p_250221_, p_250716_, p_251480_, p_251980_, p_252150_, p_248581_);
+
+    public NBTShapedRecipe(String p_272759_, CraftingBookCategory p_273506_, ShapedRecipePattern p_310709_, ItemStack p_272852_) {
+        super(p_272759_, p_273506_, p_310709_, p_272852_);
     }
 
     @Nonnull
@@ -42,22 +51,62 @@ public class NBTShapedRecipe extends ShapedRecipe {
         return result;
     }
 
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return BetterBundlesMod.RECIPE_SERIALIZER.get();
+    }
+
     private static NBTShapedRecipe migrate(ShapedRecipe recipe) {
-        return new NBTShapedRecipe(recipe.getId(), recipe.getGroup(), recipe.category(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResultItem(null));
+        return new NBTShapedRecipe(recipe.getGroup(), recipe.category(), ((ShapedRecipeMixin) recipe).getPattern(), ((ShapedRecipeMixin) recipe).getResult());
     }
 
     public static class Serializer extends ShapedRecipe.Serializer {
-        @Nonnull
+
+        public static final Codec<ShapedRecipe> CODEC = ShapedRecipe.Serializer.CODEC.xmap(NBTShapedRecipe::migrate, s -> s);
+
         @Override
-        public NBTShapedRecipe fromJson(@Nonnull ResourceLocation p_44236_, @Nonnull JsonObject p_44237_) {
-            return migrate(super.fromJson(p_44236_, p_44237_));
+        public Codec<ShapedRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public NBTShapedRecipe fromNetwork(@Nonnull ResourceLocation p_44239_, @Nonnull FriendlyByteBuf p_44240_) {
-            ShapedRecipe r = super.fromNetwork(p_44239_, p_44240_);
-            if (r == null) return null;
-            return migrate(r);
+        public ShapedRecipe fromNetwork(FriendlyByteBuf p_44234_) {
+            var recipe = super.fromNetwork(p_44234_);
+            if (recipe == null) return null;
+            return migrate(recipe);
+        }
+
+        @Override
+        public void toNetwork(FriendlyByteBuf p_44227_, ShapedRecipe p_44228_) {
+            super.toNetwork(p_44227_, p_44228_);
+        }
+    }
+
+    public static class Builder {
+
+
+        private final ShapedRecipeBuilder builder;
+
+        public Builder(ShapedRecipeBuilder builder) {
+            this.builder = builder;
+        }
+
+        public void save(RecipeOutput p_298334_) {
+            this.save(p_298334_, BuiltInRegistries.ITEM.getKey(builder.getResult().asItem()));
+        }
+
+        public void save(RecipeOutput p_298334_, ResourceLocation p_126142_) {
+            builder.save(new RecipeOutput() {
+                @Override
+                public void accept(ResourceLocation resourceLocation, Recipe<?> recipe, @Nullable ResourceLocation resourceLocation1, @Nullable JsonElement jsonElement) {
+                    p_298334_.accept(resourceLocation, migrate((ShapedRecipe) recipe), resourceLocation1, jsonElement);
+                }
+
+                @Override
+                public Advancement.Builder advancement() {
+                    return p_298334_.advancement();
+                }
+            }, p_126142_);
         }
     }
 }

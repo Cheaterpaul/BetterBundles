@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.cheaterpaul.betterbundles.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "betterbundles.refmap.json",
+  "mixins": [
+    "ShapedRecipeMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

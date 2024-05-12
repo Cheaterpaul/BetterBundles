@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "forge:condition": {
+    "type": "forge:not",
+    "value": {
+      "type": "betterbundles:config",
+      "option": "bundle"
+    }
+  },
+  "recipes": [
+    {
+      "type": "minecraft:crafting_shaped",
+      "category": "equipment",
+      "key": {
+        "#": {
+          "item": "minecraft:rabbit_hide"
+        },
+        "-": {
+          "item": "minecraft:string"
+        }
+      },
+      "pattern": [
+        "-#-",
+        "# #",
+        "###"
+      ],
+      "result": {
+        "item": "minecraft:bundle"
+      }
+    }
+  ]
+}

@@ -1,16 +1,20 @@
 dependencies {
     minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 minecraft {
     mappings channel: project.mappings_channel, version: project.mappings_version
+    copyIdeResources = true
     runs {
         client {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=betterbundles.mixins.json"
 
             mods {
-                examplemod {
+                betterbundles {
                     source sourceSets.main
                 }
             }
@@ -20,9 +24,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=betterbundles.mixins.json"
 
             mods {
-                examplemod {
+                betterbundles {
                     source sourceSets.main
                 }
             }
@@ -32,12 +37,13 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=betterbundles.mixins.json"
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'betterbundles', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                betterbundles {
                     source sourceSets.main
                 }
             }

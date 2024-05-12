@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "forge:condition": {
+    "type": "forge:not",
+    "value": {
+      "type": "betterbundles:config",
+      "option": "enhanced_bundle"
+    }
+  },
+  "recipes": [
+    {
+      "type": "betterbundles:nbt_bundle_recipe",
+      "value": {
+        "category": "equipment",
+        "key": {
+          "X": {
+            "tag": "forge:ingots/copper"
+          },
+          "Y": {
+            "item": "minecraft:bundle"
+          }
+        },
+        "pattern": [
+          "XXX",
+          "XYX",
+          "XXX"
+        ],
+        "result": {
+          "item": "betterbundles:copper_bundle"
+        }
+      }
+    }
+  ]
+}
