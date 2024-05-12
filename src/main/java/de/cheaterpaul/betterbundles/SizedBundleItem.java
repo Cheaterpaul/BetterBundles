@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -118,7 +117,7 @@ public class SizedBundleItem extends BundleItem {
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Level level, List<Component> components, @Nonnull TooltipFlag flag) {
-        components.add((new TranslatableComponent("item.minecraft.bundle.fullness", getContentWeight(stack, 64), size)).withStyle(ChatFormatting.GRAY));
+        components.add(Component.translatable("item.minecraft.bundle.fullness", getContentWeight(stack, 64), size).withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -139,7 +138,7 @@ public class SizedBundleItem extends BundleItem {
             int addStackWeight = getWeight(addStack, 64);
             if (addStackWeight == 0) {
                 if (player != null) {
-                    player.displayClientMessage(new TranslatableComponent("text.betterbundles.stack_size_to_large"), false);
+                    player.displayClientMessage(Component.translatable("text.betterbundles.stack_size_to_large"), false);
                 }
                 return 0;
             }

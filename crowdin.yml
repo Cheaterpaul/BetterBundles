@@ -1,3 +1,8 @@
+project_id: "467698"
+api_token_env: CROWDIN_KEY
+base_path: "."
+base_url: "https://api.crowdin.com"
+
 files:
   - source: /src/main/resources/assets/betterbundles/lang/en_us.json
     translation: /src/main/resources/assets/betterbundles/lang/%locale_with_underscore%.json

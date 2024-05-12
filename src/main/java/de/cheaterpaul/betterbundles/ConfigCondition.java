@@ -21,7 +21,7 @@ public class ConfigCondition implements ICondition {
     }
 
     @Override
-    public boolean test() {
+    public boolean test(IContext context) {
         return switch (this.option) {
             case "enhanced_bundle" -> Config.COMMON.disableEnhancedBundleRecipes.get();
             case "bundle" -> Config.COMMON.disableBundleRecipe.get();

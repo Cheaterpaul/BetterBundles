@@ -2,12 +2,14 @@ package de.cheaterpaul.betterbundles;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
@@ -15,14 +17,14 @@ import javax.annotation.Nonnull;
 
 public class NBTShapedRecipe extends ShapedRecipe {
 
-    public NBTShapedRecipe(ResourceLocation p_44153_, String p_44154_, int p_44155_, int p_44156_, NonNullList<Ingredient> p_44157_, ItemStack p_44158_) {
-        super(p_44153_, p_44154_, p_44155_, p_44156_, p_44157_, p_44158_);
+    public NBTShapedRecipe(ResourceLocation p_250963_, String p_250221_, CraftingBookCategory p_250716_, int p_251480_, int p_251980_, NonNullList<Ingredient> p_252150_, ItemStack p_248581_) {
+        super(p_250963_, p_250221_, p_250716_, p_251480_, p_251980_, p_252150_, p_248581_);
     }
 
     @Nonnull
     @Override
-    public ItemStack assemble(@Nonnull CraftingContainer p_44169_) {
-        ItemStack result = super.assemble(p_44169_);
+    public ItemStack assemble(@Nonnull CraftingContainer p_44169_, RegistryAccess registryAccess) {
+        ItemStack result = super.assemble(p_44169_, registryAccess);
         for (int i = 0; i < p_44169_.getHeight(); i++) {
             for (int i1 = 0; i1 < p_44169_.getWidth(); i1++) {
                 ItemStack t = p_44169_.getItem(i* p_44169_.getWidth() + i1);
@@ -41,7 +43,7 @@ public class NBTShapedRecipe extends ShapedRecipe {
     }
 
     private static NBTShapedRecipe migrate(ShapedRecipe recipe) {
-        return new NBTShapedRecipe(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResultItem());
+        return new NBTShapedRecipe(recipe.getId(), recipe.getGroup(), recipe.category(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResultItem(null));
     }
 
     public static class Serializer extends ShapedRecipe.Serializer {

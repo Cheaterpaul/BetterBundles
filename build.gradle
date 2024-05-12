@@ -27,17 +27,13 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 
 apply from: 'gradle/versioning.gradle'
 apply from: 'gradle/artifacts.gradle'
-apply from: 'gradle/crowdin.gradle'
-apply from: 'gradle/curse.gradle'
 apply from: 'gradle/forge.gradle'
 apply from: 'gradle/maven.gradle'
-apply from: 'gradle/modrinth.gradle'
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
-    dependsOn 'crowdin'
     finalizedBy('reobfJar')
 
     includeEmptyDirs = false

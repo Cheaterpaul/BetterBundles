@@ -1,37 +1,48 @@
 package de.cheaterpaul.betterbundles;
 
 import com.google.common.collect.Sets;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod("betterbundles")
 public class BetterBundlesMod
 {
     public static final String MODID = "betterbundles";
-    public static Item BUNDLE;
-    public static Item BUNDLE_COPPER;
-    public static Item BUNDLE_IRON ;
-    public static Item BUNDLE_SILVER ;
-    public static Item BUNDLE_GOLD;
-    public static Item BUNDLE_DIAMOND ;
-    public static Item BUNDLE_NETHERITE ;
-    public static RecipeType<NBTShapedRecipe> RECIPE;
-    public static RecipeSerializer<?> RECIPE_SERIALIZER;
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, MODID);
+    public static final DeferredRegister<Item> ITEMS_VANILLA = DeferredRegister.create(Registries.ITEM, "minecraft");
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, MODID);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(Registries.RECIPE_TYPE, MODID);
+
+    public static RegistryObject<Item> BUNDLE = ITEMS_VANILLA.register("bundle", () -> new SizedBundleItem(pt(), 64));
+    public static RegistryObject<Item> BUNDLE_COPPER = ITEMS.register("copper_bundle", () -> new SizedBundleItem(pt(), 96));
+    public static RegistryObject<Item> BUNDLE_IRON = ITEMS.register("iron_bundle", () -> new SizedBundleItem(pt(), 128));
+    public static RegistryObject<Item> BUNDLE_SILVER = ITEMS.register("silver_bundle", () -> new SizedBundleItem(pt(), 192));
+    public static RegistryObject<Item> BUNDLE_GOLD = ITEMS.register("gold_bundle", () -> new SizedBundleItem(pt(), 256));
+    public static RegistryObject<Item> BUNDLE_DIAMOND = ITEMS.register("diamond_bundle", () -> new SizedBundleItem(pt(), 512));
+    public static RegistryObject<Item> BUNDLE_NETHERITE = ITEMS.register("netherite_bundle", () -> new SizedBundleItem(pt().fireResistant(), 512));
+    public static RegistryObject<RecipeType<NBTShapedRecipe>> RECIPE = RECIPE_TYPE.register("nbt_bundle_recipe", () -> RecipeType.simple(new ResourceLocation(MODID,"nbt_bundle_recipe")));
+    public static RegistryObject<RecipeSerializer<?>> RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("nbt_bundle_recipe", NBTShapedRecipe.Serializer::new);
     public static final TagKey<Item> COPPER_TAG = ItemTags.create(new ResourceLocation("forge", "ingots/copper"));
     public static final TagKey<Item> SILVER_TAG = ItemTags.create(new ResourceLocation("forge", "ingots/silver"));
     public static final TagKey<Item> BUNDLE_TAG = ItemTags.create(new ResourceLocation("forge", "bundles"));
@@ -39,32 +50,30 @@ public class BetterBundlesMod
 
 
     private static Item.Properties pt() {
-        return new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TOOLS);
+        return new Item.Properties().stacksTo(1);
     }
 
     public BetterBundlesMod() {
         MinecraftForge.EVENT_BUS.register(this);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientColors::registerMethod);
         Config.register();
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ITEMS.register(modEventBus);
+        ITEMS_VANILLA.register(modEventBus);
+        RECIPE_SERIALIZERS.register(modEventBus);
+        RECIPE_TYPE.register(modEventBus);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientColors::registerMethod);
+        modEventBus.addListener(this::createCreativeTab);
     }
 
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
-            event.getRegistry().register(BUNDLE = new SizedBundleItem(pt(), 64).setRegistryName("minecraft","bundle"));
-            event.getRegistry().register(BUNDLE_COPPER = new SizedBundleItem(pt(),96).setRegistryName(MODID,"copper_bundle"));
-            event.getRegistry().register(BUNDLE_IRON= new SizedBundleItem(pt(),128).setRegistryName(MODID,"iron_bundle"));
-            event.getRegistry().register(BUNDLE_SILVER= new SizedBundleItem(pt(),192).setRegistryName(MODID,"silver_bundle"));
-            event.getRegistry().register(BUNDLE_GOLD = new SizedBundleItem(pt(),256).setRegistryName(MODID,"gold_bundle"));
-            event.getRegistry().register(BUNDLE_DIAMOND= new SizedBundleItem(pt(),512).setRegistryName(MODID,"diamond_bundle"));
-            event.getRegistry().register(BUNDLE_NETHERITE= new SizedBundleItem(pt().fireResistant(),512).setRegistryName(MODID,"netherite_bundle"));
-        }
-
-        @SubscribeEvent
-        public static void onRecipeSerialerRegistry(final RegistryEvent.Register<RecipeSerializer<?>> event) {
-            event.getRegistry().register(RECIPE_SERIALIZER = new NBTShapedRecipe.Serializer().setRegistryName(MODID, "nbt_bundle_recipe"));
-            RECIPE = RecipeType.register(MODID + ":nbt_bundle_recipe");
+    private void createCreativeTab(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(BUNDLE);
+            event.accept(BUNDLE_COPPER);
+            event.accept(BUNDLE_IRON);
+            event.accept(BUNDLE_SILVER);
+            event.accept(BUNDLE_GOLD);
+            event.accept(BUNDLE_DIAMOND);
+            event.accept(BUNDLE_NETHERITE);
         }
     }
 }
